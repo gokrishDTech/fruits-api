@@ -31,8 +31,8 @@ jobs:
     - name: Build Docker image
       run: |
         IMAGE_TAG=${{ github.sha }}
-        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/fruits-api:${IMAGE_TAG} \
-                     -t ${{ secrets.DOCKERHUB_USERNAME }}/fruits-api:latest .
+        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}fruits-api:${IMAGE_TAG} \
+                     -t ${{ secrets.DOCKERHUB_USERNAME }}fruits-api:latest .
 
     - name: Login to DockerHub
       uses: docker/login-action@v2
@@ -43,5 +43,5 @@ jobs:
     - name: Push Docker image
       run: |
         IMAGE_TAG=${{ github.sha }}
-        docker push ${{ secrets.DOCKERHUB_USERNAME }}/fruits-api:${IMAGE_TAG}
-        docker push ${{ secrets.DOCKERHUB_USERNAME }}/fruits-api:latest
+        docker push ${{ secrets.DOCKERHUB_USERNAME }}fruits-api:${IMAGE_TAG}
+        docker push ${{ secrets.DOCKERHUB_USERNAME }}fruits-api:latest
