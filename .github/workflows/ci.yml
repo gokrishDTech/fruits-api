@@ -8,6 +8,10 @@ jobs:
   build-test-publish:
     runs-on: self-hosted
 
+    env:
+      IMAGE_NAME: fruits-api
+      IMAGE_TAG: ${{ github.sha }}
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
@@ -28,20 +32,19 @@ jobs:
         export TESTING=1
         pytest
 
-    - name: Build Docker image
-      run: |
-        IMAGE_TAG=${{ github.sha }}
-        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}fruits-api:${IMAGE_TAG} \
-                     -t ${{ secrets.DOCKERHUB_USERNAME }}fruits-api:latest .
-
     - name: Login to DockerHub
       uses: docker/login-action@v2
       with:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+    - name: Build Docker image
+      run: |
+        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} \
+                     -t ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:latest .
+
     - name: Push Docker image
       run: |
-        IMAGE_TAG=${{ github.sha }}
-        docker push ${{ secrets.DOCKERHUB_USERNAME }}fruits-api:${IMAGE_TAG}
-        docker push ${{ secrets.DOCKERHUB_USERNAME }}fruits-api:latest
+        docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+        docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:latest
+
