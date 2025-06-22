@@ -1,0 +1,29 @@
+name: CD
+
+on:
+  workflow_run:
+    workflows: ["CI"]
+    types:
+      - completed
+    branches:
+      - master
+
+jobs:
+  deploy:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: self-hosted
+
+    steps:
+    - name: Pull Docker Image
+      run: |
+        docker pull ${{ secrets.DOCKERHUB_USERNAME }}/fruits-api:latest
+
+    - name: Stop existing container (if running)
+      run: |
+        docker stop fruits-api || true
+        docker rm fruits-api || true
+
+    - name: Run Docker Container on Port 8000
+      run: |
+        docker run -d --name fruits-api -p 8000:8000 \
+          ${{ secrets.DOCKERHUB_USERNAME }}/fruits-api:latest

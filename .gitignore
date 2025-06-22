@@ -1,0 +1,36 @@
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+.env
+
+# SQLite database files
+*.db
+test.db
+
+# pytest cache
+.pytest_cache/
+
+# Docker files
+*.tar
+.dockerignore
+
+# IDE settings
+.vscode/
+.idea/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# GitHub Actions self-hosted runner (if used)
+actions-runner/
+
+# Environment variables
+.env
